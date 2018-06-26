@@ -16,7 +16,6 @@ function setAccountsThatExist() {
   var transIds = transposeSheetsDataRange(ids)
   PROPERTIES.getRange(2,1,numberOfRows,1).setValues(transNames)
   PROPERTIES.getRange(2,2,numberOfRows,1).setValues(transIds)
-  Logger.log(transNames[[0]])
   CONFIG.getRange(2,1).setValue(transNames[[0]])
 
  printAllProperties()
@@ -32,20 +31,42 @@ function printAllProperties(){
   var request = Analytics.Management.Accounts.list()
   var names = request.items.map(function(a) {return a.name;});
   var ids = request.items.map(function(a) {return a.id;});
-  
-  ids.forEach(function (data) { 
-    var request = Analytics.Management.Webproperties.list(data).items
-    request.forEach(function (data) { 
-      var i = 1
-      var range = PROPERTIES.getRange("C1:C").getValues();
+var propertiesArray = allPropertiesOfAllAccounts(ids)
+var range = PROPERTIES.getRange("C1:C").getValues();
       var lastInRange = range.filter(String).length;
-      PROPERTIES.getRange(lastInRange+i,3,1,3).setValues([[data.accountId,data.name,data.id]])
-      var i = i +1
-    })
-  })
+var lengthOfData = propertiesArray[0].filter(String).length
+PROPERTIES.getRange(2,3,lengthOfData,3).setValues(propertiesArray[0])
 getPropertiesForValidation()
- 
 }
+
+
+
+function allPropertiesOfAllAccounts(ids){
+  ids.forEach(function (data) {
+    var request = Analytics.Management.Webproperties.list(data).items
+    
+    allRows.push(allPropertiesOfOneAccount(request))
+    return(allRows)
+  })
+  return(allRows)
+}
+
+
+function allPropertiesOfOneAccount(request){
+  request.forEach(function (data){ 
+    var row = [data.accountId,data.name,data.id]
+
+    rows.push(row)
+    
+    
+    return(rows)
+    
+  })
+  return(rows)
+  }
+
+ 
+
 
 function getAccountId(NAME){
   var request = Analytics.Management.Accounts.list()    

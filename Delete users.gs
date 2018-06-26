@@ -10,7 +10,8 @@ userIdTypeValue = CONFIG.getRange("A6").getValue();
 webPropertyId = CONFIG.getRange("B4").getValue();
 AccountId = CONFIG.getRange("b2").getValue();
 PROPERTIES = SS.getSheetByName("Properties_sheet");
-
+allRows = []
+rows = []
 
 
 

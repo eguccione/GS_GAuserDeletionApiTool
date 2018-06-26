@@ -1,7 +1,6 @@
 // http://stackoverflow.com/questions/11273288/script-import-local-csv-in-google-spreadsheet
 
-function test(){
-  copyValues()}
+
 
 function doGet(e) {
   var app = UiApp.createApplication().setTitle("Upload CSV to Sheet");
@@ -12,11 +11,11 @@ function doGet(e) {
   form.add(formContent);
   app.add(form);
   SpreadsheetApp.getActiveSpreadsheet().show(app);
+  return app;
 }
 
 function doPost(e) {
-    var app = UiApp.getActiveApplication();
-
+  var app = UiApp.getActiveApplication();
   // data returned is a blob for FileUpload widget
   var fileBlob = e.parameter.thefile;
   
@@ -26,6 +25,7 @@ function doPost(e) {
   var rows = fileBlob.contents.split('\n');
   for(var r=0, max_r=rows.length; r<max_r; ++r)
     values.push( rows[r].split(',') );  // rows must have the same number of columns
+
   insertSheet("data")
   var sheet = SS.getSheetByName("data");
   for (var i = 0; i < values.length; i++) {
@@ -33,7 +33,6 @@ function doPost(e) {
   }
   copyValues()
   SS.getSheetByName("Input_sheet").activate();
-  
   app.close();
   return app;
 }
